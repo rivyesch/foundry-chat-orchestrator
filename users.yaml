@@ -1,0 +1,21 @@
+users:
+  - id: user-1
+    aad_object_id: "REPLACE_WITH_REAL_AAD_OBJECT_ID"
+    email: "testuser1@example.com"
+    display_name: "Test User One"
+  - id: user-2
+    aad_object_id: "REPLACE_WITH_REAL_AAD_OBJECT_ID"
+    email: "testuser2@example.com"
+    display_name: "Test User Two"
+  - id: user-3
+    aad_object_id: "REPLACE_WITH_REAL_AAD_OBJECT_ID"
+    email: "testuser3@example.com"
+    display_name: "Test User Three"
+  - id: user-4
+    aad_object_id: "REPLACE_WITH_REAL_AAD_OBJECT_ID"
+    email: "testuser4@example.com"
+    display_name: "Test User Four"
+  - id: user-5
+    aad_object_id: "REPLACE_WITH_REAL_AAD_OBJECT_ID"
+    email: "testuser5@example.com"
+    display_name: "Test User Five"
