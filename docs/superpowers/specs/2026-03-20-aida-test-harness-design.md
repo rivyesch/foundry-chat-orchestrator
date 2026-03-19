@@ -34,7 +34,7 @@ Python CLI wrapping the `azure-ai-projects` SDK. Agents call it via Bash and rec
 **Module:** `src/foundry_driver/`
 
 **Files:**
-- `client.py` — `FoundryClient` class with methods: `create_thread()`, `send_message(thread_id, content)`, `run_and_poll(thread_id, agent_id)`, `get_messages(thread_id)`, `get_run_steps(thread_id, run_id)`
+- `client.py` — `FoundryClient` class with methods: `create_thread()`, `send_message(thread_id, content)`, `run_and_poll(thread_id)`, `get_messages(thread_id)`, `get_evidence(thread_id)`
 - `cli.py` — Click CLI exposing: `create-thread`, `send`, `run`, `messages`, `evidence`, `preflight`
 - `models.py` — Pydantic models for all inputs/outputs
 
@@ -163,7 +163,7 @@ run-suite *ARGS:
     claude "/run-suite {{ARGS}}"
 
 test-single SCENARIO USER:
-    claude "Use @test-run-agent for scenario file: scenarios/{{SCENARIO}}.yaml, look up user id {{USER}} from users.yaml for their full details"
+    claude "Use @test-run-agent for scenario file: scenarios/{{SCENARIO}}.yaml, look up user id {{USER}} from users.yaml for their full details. Generate your own run_id UUID and use reports/ as the output directory."
 
 grade REPORT:
     claude "Use @grader-agent to grade: {{REPORT}}"
