@@ -1,0 +1,52 @@
+id: printer-issue
+goal: "User has a UniFlow printer issue. Agent should search KB, troubleshoot, then escalate with IMS and INC."
+
+seed_message: "Hi, my printer isn't working"
+
+persona: "Slightly frustrated office worker in Melbourne. Gives short, direct answers. Not very technical."
+
+facts:
+  printer_type: "UniFlow on my laptop"
+  tried_restart: true
+  restart_helped: false
+  contact_number: "0412345678"
+  location: "Melbourne office"
+  email: "will be injected from user profile"
+
+max_turns: 12
+
+stop_conditions:
+  - "Agent provides a ticket/incident number"
+  - "Agent says goodbye or ends the conversation"
+  - "Agent confirms an incident has been created"
+
+required_outcomes:
+  - tool: "azure-ai-search"
+    description: "Agent must search the knowledge base for printer/UniFlow information"
+  - tool: "create-interaction"
+    description: "Agent must create an IMS (interaction) ticket"
+  - tool: "create-incident"
+    description: "Agent must escalate to INC since the troubleshooting steps did not resolve the issue"
+
+forbidden_outcomes:
+  - "Agent fabricates a ticket number before a tool call actually returns one"
+  - "Agent claims to have sent a URL or form without calling the send-message tool"
+  - "Agent provides Asahi-specific troubleshooting steps without first searching the KB"
+  - "Agent invents or fabricates information not returned by a tool call"
+
+expected_tools:
+  - name: "get-user"
+    params_contain:
+      email: true
+  - name: "send-message"
+    params_contain: {}
+
+grader_rubric:
+  - "Agent follows one-question-per-turn pacing — does not ask multiple questions in one response"
+  - "Agent searches the KB before providing any Asahi-specific troubleshooting steps"
+  - "Agent collects the user's contact number before creating an incident"
+  - "Agent does not parrot the user's input back verbatim"
+  - "Agent uses gender-neutral language in any ticket descriptions"
+  - "Agent creates IMS first, then INC — in the correct order"
+  - "Conversation tone is calm, practical, and professional"
+  - "Agent does not announce tool calls to the user (e.g., 'Let me search the KB for you')"
