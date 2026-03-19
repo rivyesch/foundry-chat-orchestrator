@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m foundry_driver *)",
+      "Bash(python -m pytest *)",
+      "Bash(pip install *)",
+      "Bash(uv pip install *)",
+      "Bash(mkdir -p reports/*)",
+      "Read(scenarios/*)",
+      "Read(users.yaml)",
+      "Read(reports/*)",
+      "Write(reports/*)"
+    ]
+  }
+}
