@@ -6,4 +6,4 @@ dist/
 build/
 .pytest_cache/
 .venv/
-reports/suite-*/
+reports/
