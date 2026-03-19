@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 import os
 
+from azure.ai.agents import AgentsClient
 from azure.ai.agents.models import ListSortOrder
-from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
@@ -25,7 +25,7 @@ load_dotenv()
 
 
 class FoundryClient:
-    """Thin wrapper around azure-ai-projects SDK for driving agent conversations."""
+    """Thin wrapper around azure-ai-agents SDK for driving agent conversations."""
 
     def __init__(
         self,
@@ -34,19 +34,19 @@ class FoundryClient:
     ):
         self.endpoint = endpoint or os.environ["FOUNDRY_ENDPOINT"]
         self.agent_id = agent_id or os.environ["FOUNDRY_AGENT_ID"]
-        self._project = AIProjectClient(
-            credential=DefaultAzureCredential(),
+        self._client = AgentsClient(
             endpoint=self.endpoint,
+            credential=DefaultAzureCredential(),
         )
 
     def create_thread(self) -> ThreadResponse:
         """Create a new conversation thread."""
-        thread = self._project.agents.threads.create()
+        thread = self._client.threads.create()
         return ThreadResponse(thread_id=thread.id)
 
     def send_message(self, thread_id: str, content: str) -> MessageResponse:
         """Send a user message to a thread."""
-        msg = self._project.agents.messages.create(
+        msg = self._client.messages.create(
             thread_id=thread_id,
             role="user",
             content=content,
@@ -55,7 +55,7 @@ class FoundryClient:
 
     def run_and_poll(self, thread_id: str) -> RunResponse:
         """Create a run and poll until completion."""
-        run = self._project.agents.runs.create_and_process(
+        run = self._client.runs.create_and_process(
             thread_id=thread_id,
             agent_id=self.agent_id,
         )
@@ -66,7 +66,7 @@ class FoundryClient:
 
     def get_messages(self, thread_id: str) -> list[ConversationMessage]:
         """Get all messages in a thread, ordered ascending."""
-        raw_messages = self._project.agents.messages.list(
+        raw_messages = self._client.messages.list(
             thread_id=thread_id,
             order=ListSortOrder.ASCENDING,
         )
@@ -85,11 +85,11 @@ class FoundryClient:
 
     def get_evidence(self, thread_id: str) -> EvidenceResponse:
         """Get tool call evidence for all runs in a thread."""
-        runs = self._project.agents.runs.list(thread_id=thread_id)
+        runs = self._client.runs.list(thread_id=thread_id)
         run_evidences = []
         for run in runs:
             tool_calls = []
-            steps = self._project.agents.run_steps.list(
+            steps = self._client.run_steps.list(
                 thread_id=thread_id,
                 run_id=run.id,
             )
@@ -119,7 +119,7 @@ class FoundryClient:
     def preflight(self) -> PreflightResult:
         """Validate auth and connectivity."""
         try:
-            self._project.agents.get_agent(self.agent_id)
+            self._client.get_agent(self.agent_id)
             return PreflightResult(
                 success=True,
                 endpoint=self.endpoint,
