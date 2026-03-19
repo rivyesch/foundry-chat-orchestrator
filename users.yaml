@@ -1,8 +1,8 @@
 users:
   - id: user-1
-    aad_object_id: "REPLACE_WITH_REAL_AAD_OBJECT_ID"
-    email: "testuser1@example.com"
-    display_name: "Test User One"
+    aad_object_id: "4beb6102-53df-463f-b5e9-d2cb8d739f3f"
+    email: "rivyesch.ranjan@asahibeverages.com"
+    display_name: "Ranjan, Rivyesch"
   - id: user-2
     aad_object_id: "REPLACE_WITH_REAL_AAD_OBJECT_ID"
     email: "testuser2@example.com"

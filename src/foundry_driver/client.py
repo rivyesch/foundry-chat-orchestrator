@@ -97,18 +97,24 @@ class FoundryClient:
                 if step.type != "tool_calls":
                     continue
                 for tc in step.step_details.tool_calls:
+                    # OpenAPI tool calls expose data via as_dict(), not attributes
+                    tc_dict = tc.as_dict()
+                    func = tc_dict.get("function", {})
+                    name = func.get("name", "unknown")
+                    arguments = func.get("arguments", "{}")
+                    output = func.get("output", "")
                     try:
-                        input_data = json.loads(tc.function.arguments)
+                        input_data = json.loads(arguments)
                     except (json.JSONDecodeError, TypeError):
-                        input_data = {"raw": str(tc.function.arguments)}
+                        input_data = {"raw": str(arguments)}
                     try:
-                        output_data = json.loads(tc.function.output) if tc.function.output else {}
+                        output_data = json.loads(output) if output else {}
                     except (json.JSONDecodeError, TypeError):
-                        output_data = {"raw": str(tc.function.output)}
+                        output_data = {"raw": str(output)}
                     tool_calls.append(
                         ToolCallDetail(
                             foundry_run_id=run.id,
-                            tool=tc.function.name,
+                            tool=name,
                             input=input_data,
                             output=output_data,
                         )

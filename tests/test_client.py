@@ -115,9 +115,14 @@ def test_get_evidence(client, mock_agents_client):
     mock_step = MagicMock()
     mock_step.type = "tool_calls"
     mock_tool_call = MagicMock()
-    mock_tool_call.function.name = "search-kb"
-    mock_tool_call.function.arguments = '{"query": "printer"}'
-    mock_tool_call.function.output = '{"results": []}'
+    mock_tool_call.as_dict.return_value = {
+        "type": "openapi",
+        "function": {
+            "name": "search-kb",
+            "arguments": '{"query": "printer"}',
+            "output": '{"results": []}',
+        },
+    }
     mock_step.step_details.tool_calls = [mock_tool_call]
     mock_agents_client.run_steps.list.return_value = [mock_step]
 
